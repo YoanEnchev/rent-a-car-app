@@ -5,7 +5,7 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { EmailExistsValidator } from '../validators/email-does-not-exist';
+import { EmailExistsValidator } from '../../user/validators/email-does-not-exist';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'test1@example.com' })
