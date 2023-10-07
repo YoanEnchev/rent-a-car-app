@@ -1,0 +1,29 @@
+version: '3'
+services:
+  rent_a_car_service:
+    env_file: 'rent_a_car_service/.env'
+    container_name: rent_a_car_service
+    build: .
+    ports:
+      - '3001:3000'
+    volumes:
+      - ./rent_a_car_service/:/var/www
+    restart: always
+    links:
+      - postgres
+    depends_on:
+      - postgres
+  postgres:
+    env_file: 'rent_a_car_service/.env'
+    container_name: postgres_db
+    image: postgres:14.7
+    restart: always
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      # What sql script to run when creating the container.
+      - ./db/create_test_db.sql:/docker-entrypoint-initdb.d/create_test_db.sql
