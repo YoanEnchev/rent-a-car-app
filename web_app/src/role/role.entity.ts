@@ -1,15 +1,13 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Allow } from 'class-validator';
 
-@Entity()
+@Entity({name: 'roles'})
 export class Role {
   @ApiProperty({ example: 1 })
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Allow()
   @ApiProperty({ example: 'Admin' })
   @Column()
-  name?: string;
+  name: string;
 }

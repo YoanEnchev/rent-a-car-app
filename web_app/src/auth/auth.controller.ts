@@ -7,6 +7,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 @Controller()
 export class AuthController {
 
+  constructor(private readonly userService: UserService) {}
+
 
   @Get('/register')
   @Render('auth/register')
@@ -14,5 +16,17 @@ export class AuthController {
     return {}
   }
 
+  @Post('/register')
+  async register(@Body() createUserDto: CreateUserDto) {
 
+    try {
+      await this.userService.create(createUserDto)
+    }
+    catch (err) {
+      console.log('Catch Block')
+      console.log(err)
+    }
+
+    return {}
+  }
 }

@@ -6,11 +6,12 @@ import {
     BeforeInsert,
     BeforeUpdate,
     OneToOne,
+    JoinColumn,
   } from 'typeorm';
   import { Role } from '../role/role.entity';
-  import bcrypt from 'bcryptjs';
+  import * as bcrypt from 'bcryptjs';
   
-  @Entity()
+  @Entity({name: 'users'})
   export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -28,10 +29,11 @@ import {
     @BeforeInsert()
     @BeforeUpdate()
     async setPassword() {
-      if (this.previousPassword !== this.password && this.password) {
-        const salt = await bcrypt.genSalt();
-        this.password = await bcrypt.hash(this.password, salt);
-      }
+
+      console.log('bcrypt', bcrypt)
+      const salt = await bcrypt.genSalt();
+      this.password = await bcrypt.hash(this.password, salt);
+  
     }
     @Column({ type: String, nullable: true })
     firstName: string | null;
@@ -39,10 +41,9 @@ import {
     @Column({ type: String, nullable: true })
     lastName: string | null;
   
-    @OneToOne(() => Role, {
-      eager: true,
-    })
-    role?: Role | null;
+    @OneToOne(type => Role, role => role.id)
+    @JoinColumn()
+    role?: Role;
   
     @CreateDateColumn()
     createdAt: Date;

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
 import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { User } from '../user/user.entity';
+import { RoleEnum } from 'src/role/RoleEnum';
 //
 @Injectable()
 export class UserService {
@@ -15,9 +16,17 @@ export class UserService {
     return 'hi'
   }
 
-  create(createProfileDto: CreateUserDto): Promise<User> {
+  async create(createProfileDto: CreateUserDto, roleId?: RoleEnum): Promise<User> {
+    console.log('create 1')
+    console.log(await this.usersRepository.find())
+
+    console.log('create 2')
     return this.usersRepository.save(
-      this.usersRepository.create(createProfileDto),
+      this.usersRepository.create({...createProfileDto, ...{
+        role: {
+          id: roleId ?? RoleEnum.user
+        }
+      }}),
     );
   }
 

@@ -1,22 +1,12 @@
-import dotenv from 'dotenv';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { registerAs } from "@nestjs/config";
+import { config as dotenvConfig } from 'dotenv';
+import { DataSource, DataSourceOptions } from "typeorm";
 
-dotenv.config({ path: '../.env' });
+dotenvConfig({ path: '../.env' });
 
-export default {
-  // type: 'postgres',
-  // host: process.env.DB_HOST,
-  // port: process.env.DB_POSTGRES_PORT,
-  // username: process.env.DB_USER,
-  // database: process.env.DB_NAME,
-  // password: process.env.DB_PASSWORD,
-  // entities: ['src/**/*.entity.ts'],
-  // migrations: ['src/migrations/**/*.{ts,js}'],
-  // cli: {
-  //   migrationsDir: 'src/migrations',
-  // },
-  // namingStrategy: new SnakeNamingStrategy()
-
+const config = {
+  namingStrategy: new SnakeNamingStrategy(),
 
   type: 'postgres',
   host: process.env.DB_HOST,
@@ -24,6 +14,14 @@ export default {
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: ['src/**/*.entity.ts'],
+
+  name: 'default',
+  entities: [ 'dist/src/**/*.entity.{ts,js}'], // Use 'src/**/*.entity.{ts,js}' for seeding
   synchronize: true,
+  migrations: ['dist/src/migrations/**/*.{ts,js}'],
+  migrationsTableName: "migrations_typeorm",
+  migrationsRun: true
 };
+
+export default registerAs('typeorm', () => config)
+export const connectionSource = new DataSource(config as DataSourceOptions);

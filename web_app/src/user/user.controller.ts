@@ -9,9 +9,4 @@ export class UserController {
   getHello(): string {
     return this.userService.getHello();
   }
-
-  @Get()
-  showRegisterForm(): string {
-    return this.userService.getHello();
-  }
 }
