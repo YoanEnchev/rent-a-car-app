@@ -16,7 +16,10 @@ const config = {
   database: process.env.DB_NAME,
 
   name: 'default',
-  entities: [ 'dist/src/**/*.entity.{ts,js}'], // Use 'src/**/*.entity.{ts,js}' for seeding
+  entities: [
+    'dist/src/**/*.entity.{ts,js}'
+    // 'src/**/*.entity.{ts,js}' // Use for seeding
+  ],
   synchronize: true,
   migrations: ['dist/src/migrations/**/*.{ts,js}'],
   migrationsTableName: "migrations_typeorm",

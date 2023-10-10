@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HomeModule } from './home/home.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
@@ -8,10 +8,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import typeorm from '../ormconfig'
 import { RecordsSeed } from './commands/seeder';
 import { CommandModule } from 'nestjs-command';
+import { HandlebarsMiddleware } from './middleware/handlebars.middleware';
+import { AdminModule } from './admin/admin.module';
+import { isAdminMiddleware } from './middleware/is-admin.middleware';
 
 @Module({
   imports: [
-    HomeModule, RoleModule, UserModule, AuthModule,
+    HomeModule, RoleModule, UserModule, AuthModule, AdminModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm]
@@ -24,4 +27,9 @@ import { CommandModule } from 'nestjs-command';
   ],
   providers: [RecordsSeed]
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(HandlebarsMiddleware).forRoutes('*');
+    consumer.apply(isAdminMiddleware).forRoutes('/admin/*');
+  }
+}

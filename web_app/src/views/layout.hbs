@@ -19,14 +19,33 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
+          {{#if isLoggedIn}}
+            <li class="nav-item">
+              <form method="POST" action="/logout">
+                <button class="nav-link" href="/logout">Logout</button>
+              </form>
+            </li>
+            {{#if isAdmin}}
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/users">Delete Users</a>
+              </li>
+            {{/if}}
+          {{else}}
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+          {{/if}}
         </ul>
       </div>
     </div>
   </nav>
   <div class="container">
+    {{#if errorMessage}}
+      <p class="text-danger">{{errorMessage}}</p>
+    {{/if}}
     {{{ body }}} <!-- This is where child templates will be inserted -->
   </div>
   <!-- Bootstrap JS and Popper.js from CDN -->

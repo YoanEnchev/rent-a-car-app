@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
-import { CreateUserDto } from '../auth/dto/create-user.dto';
 import { User } from '../user/user.entity';
 import { RoleEnum } from 'src/role/RoleEnum';
-//
+import { RegistrationRequest } from 'src/auth/validations/user.register';
+
 @Injectable()
 export class UserService {
   constructor(
@@ -16,18 +16,19 @@ export class UserService {
     return 'hi'
   }
 
-  async create(createProfileDto: CreateUserDto, roleId?: RoleEnum): Promise<User> {
-    console.log('create 1')
-    console.log(await this.usersRepository.find())
-
-    console.log('create 2')
+  async create(рegistrationRequest: RegistrationRequest, roleId?: RoleEnum): Promise<User> {
+    
     return this.usersRepository.save(
-      this.usersRepository.create({...createProfileDto, ...{
+      this.usersRepository.create({...рegistrationRequest, ...{
         role: {
           id: roleId ?? RoleEnum.user
         }
       }}),
     );
+  }
+
+  find(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
   findByEmail(email: string): Promise<User|null> {
@@ -45,7 +46,7 @@ export class UserService {
     );
   }
 
-  async softDelete(id: User['id']): Promise<void> {
-    await this.usersRepository.softDelete(id);
+  async delete(id: User['id']): Promise<void> {
+    await this.usersRepository.delete(id);
   }
 }

@@ -1,15 +1,17 @@
-import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments } from 'class-validator';
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../user.service'; // Replace with the actual service for user management
+import { UserService } from '../user.service';
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
-@Injectable()
+
 @ValidatorConstraint({ name: 'emailExists', async: true })
+@Injectable()
 export class EmailExistsValidator implements ValidatorConstraintInterface {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService,) {}
 
   async validate(email: string, _args: ValidationArguments) {
+
     const user = await this.userService.findByEmail(email);
     
-    return !user;
+    return !!user;
   }
 }

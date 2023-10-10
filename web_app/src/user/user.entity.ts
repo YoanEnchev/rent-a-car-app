@@ -5,11 +5,12 @@ import {
     PrimaryGeneratedColumn,
     BeforeInsert,
     BeforeUpdate,
-    OneToOne,
     JoinColumn,
+    ManyToOne,
   } from 'typeorm';
   import { Role } from '../role/role.entity';
   import * as bcrypt from 'bcryptjs';
+import { RoleEnum } from 'src/role/RoleEnum';
   
   @Entity({name: 'users'})
   export class User {
@@ -41,10 +42,18 @@ import {
     @Column({ type: String, nullable: true })
     lastName: string | null;
   
-    @OneToOne(type => Role, role => role.id)
+    @ManyToOne(type => Role, role => role.users, { eager: true })
     @JoinColumn()
-    role?: Role;
+    role: Role;
   
     @CreateDateColumn()
     createdAt: Date;
+
+    isAdmin(): boolean {
+      return this.role.id == RoleEnum.admin
+    }
+
+    isModerator(): boolean {
+      return this.role.id == RoleEnum.moderator
+    }
   }

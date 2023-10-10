@@ -1,19 +1,29 @@
 import { NestFactory } from '@nestjs/core';
-// import { HomeModule } from './home/home.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { join } from 'path';
+import { useContainer } from 'class-validator';
+import * as session from 'express-session';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  console.log('------->');
-  console.log(join(__dirname, 'views'));
-
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.useStaticAssets(join(__dirname, '..', 'public'));
 
-  app.setViewEngine('hbs')
+  app.setViewEngine('hbs');
+
+  useContainer(app, { fallbackOnErrors: true });
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
+  app.use(
+    session({
+      secret: process.env.SECRET,
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
 
   await app.listen(3000);
 }

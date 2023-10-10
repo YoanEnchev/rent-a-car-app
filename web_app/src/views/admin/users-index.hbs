@@ -1,0 +1,11 @@
+{{#> body }}
+    {{#each users}}
+        <div class="mb-5">
+            <p>Email: {{this.email}}</p>
+
+            <form method="POST" action="/admin/delete-user/{{this.id}}">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {{/each}}
+{{/body}}
