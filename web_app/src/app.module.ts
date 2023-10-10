@@ -11,10 +11,12 @@ import { CommandModule } from 'nestjs-command';
 import { HandlebarsMiddleware } from './middleware/handlebars.middleware';
 import { AdminModule } from './admin/admin.module';
 import { isAdminMiddleware } from './middleware/is-admin.middleware';
+import { CarModule } from './cars/car.module';
+import { BookingModule } from './bookings/booking.module';
 
 @Module({
   imports: [
-    HomeModule, RoleModule, UserModule, AuthModule, AdminModule,
+    HomeModule, RoleModule, UserModule, AuthModule, AdminModule, CarModule, BookingModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeorm]

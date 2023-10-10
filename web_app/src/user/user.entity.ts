@@ -7,10 +7,13 @@ import {
     BeforeUpdate,
     JoinColumn,
     ManyToOne,
+    ManyToMany,
+    JoinTable,
   } from 'typeorm';
   import { Role } from '../role/role.entity';
   import * as bcrypt from 'bcryptjs';
 import { RoleEnum } from 'src/role/RoleEnum';
+import { Car } from 'src/cars/entities/car.entity';
   
   @Entity({name: 'users'})
   export class User {
@@ -45,6 +48,10 @@ import { RoleEnum } from 'src/role/RoleEnum';
     @ManyToOne(type => Role, role => role.users, { eager: true })
     @JoinColumn()
     role: Role;
+
+    @ManyToMany(() => Car, car => car.bookings, { cascade: true })
+    @JoinTable()
+    bookings: Car[];
   
     @CreateDateColumn()
     createdAt: Date;
