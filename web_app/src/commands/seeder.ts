@@ -6,6 +6,9 @@ import { RoleService } from 'src/role/role.service';
 import { CarService } from 'src/cars/car.service';
 import { Model } from 'src/cars/entities/model.entity';
 import { Car } from 'src/cars/entities/car.entity';
+import { Booking } from 'src/bookings/booking.entity';
+import { BookingCreateRequest } from 'src/bookings/validators/booking.create';
+import { BookingService } from 'src/bookings/booking.service';
 
 @Injectable()
 export class RecordsSeed {
@@ -13,6 +16,7 @@ export class RecordsSeed {
         private readonly userService: UserService,
         private readonly roleService: RoleService,
         private readonly carService: CarService,
+        private readonly bookingService: BookingService,
     ) { }
     
     // Run npx nestjs-command seed:records  to execute it
@@ -119,8 +123,29 @@ export class RecordsSeed {
 
 
         // Bookings
-        Promise.allSettled(carsPromises).then(([cars]) => {
+        Promise.allSettled(carsPromises).then((results) => {
+            const cars = results
+            .filter((result) => result.status === 'fulfilled')
+            .map((result) => (result as PromiseFulfilledResult<Car>).value)
 
+            let bookingCreateRequest = Object.assign(new BookingCreateRequest(), {
+                carID: cars[0].id,
+                userID: ordinaryClient1.id,
+                startDate: (new Date()).setDate((new Date()).getDate() + 2),
+                endDate: (new Date()).setDate((new Date()).getDate() + 5)
+            })
+
+            this.bookingService.createBooking(bookingCreateRequest)
+
+            
+            bookingCreateRequest = Object.assign(new BookingCreateRequest(), {
+                carID: cars[1].id,
+                userID: ordinaryClient2.id,
+                startDate: (new Date()).setDate((new Date()).getDate() + 4),
+                endDate: (new Date()).setDate((new Date()).getDate() + 7)
+            })
+
+            this.bookingService.createBooking(bookingCreateRequest)
         });
     }
 }

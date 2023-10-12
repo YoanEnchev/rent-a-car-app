@@ -37,6 +37,12 @@ export class UserService {
     });
   }
 
+  async userExists(id: number): Promise<boolean> {
+    return !!this.usersRepository.findOne({
+      where: {id}
+    })
+  }
+
   update(id: User['id'], payload: DeepPartial<User>): Promise<User> {
     return this.usersRepository.save(
       this.usersRepository.create({

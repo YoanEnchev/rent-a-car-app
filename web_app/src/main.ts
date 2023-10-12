@@ -4,7 +4,6 @@ import { AppModule } from './app.module';
 import { join } from 'path';
 import { useContainer } from 'class-validator';
 import * as session from 'express-session';
-import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

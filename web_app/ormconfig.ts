@@ -17,8 +17,8 @@ const config = {
 
   name: 'default',
   entities: [
-    'dist/src/**/*.entity.{ts,js}'
-    // 'src/**/*.entity.{ts,js}' // Use for seeding
+    // 'dist/src/**/*.entity.{ts,js}'
+    'src/**/*.entity.{ts,js}' // Use for seeding
   ],
   synchronize: true,
   migrations: ['dist/src/migrations/**/*.{ts,js}'],

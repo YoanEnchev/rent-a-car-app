@@ -24,7 +24,7 @@ export class CarService {
   ) {}
 
   async createMake(make: CreateMake): Promise<Make> {
-    return this.makeRepository.create(make)
+    return this.makeRepository.create({...make, models: []})
   }
 
   async createModel(model: CreateModel): Promise<Model> {
@@ -32,7 +32,12 @@ export class CarService {
   }
 
   async createCar(car: CarCreateRequest): Promise<Car> {
-    return this.carRepository.create(car)
+    return this.carRepository.create({
+      model: {
+        id: car.modelID
+      },
+      year: car.year
+    })
   }
 
   async editCar(car: CarEditRequest): Promise<void> {
@@ -51,5 +56,9 @@ export class CarService {
     return !!this.modelRepository.findOne({
       where: {id}
     })
+  }
+
+  async find(): Promise<Car[]> {
+    return this.carRepository.find();
   }
 }
