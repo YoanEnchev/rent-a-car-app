@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Req } from '@nestjs/common';
 import { BookingCreateRequest } from './validators/booking.create';
 import { Booking } from './booking.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Request } from 'express';
-import { ISessionAttributes } from 'src/session/ISessionAttributes';
+import * as express from 'express';
 
 @Injectable()
 export class BookingService {
@@ -17,18 +16,11 @@ export class BookingService {
     return 'Hello World! xxxzzz';
   }
 
-  async createBooking(bookingRequest: BookingCreateRequest): Promise<Booking> {
+  async createBooking(@Req() req: express.Request): Promise<Booking> {
     
-    return await this.bookingRepository.create({
-      startDate: bookingRequest.startDate,
-      endDate: bookingRequest.endDate,
-      car: {
-        id: bookingRequest.carID
-      },
-      user: {
-        id: bookingRequest.userID
-      }
-    })
+    const bookingRequest: BookingCreateRequest = Object.assign(new BookingCreateRequest(), req.body)
+
+    return await this.bookingRepository.save(this.bookingRepository.create(bookingRequest))
   }
 
   async delete(id: Booking['id']): Promise<void> {

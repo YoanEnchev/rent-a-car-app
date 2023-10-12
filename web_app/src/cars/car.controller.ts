@@ -8,8 +8,7 @@ export class CarController {
   @Get('/cars')
   @Render('cars/index')
   async listCars() {
-    console.log('11111111111111111111')
-    console.log('-------->', await this.carService.find())
+
     return {
       cars: await this.carService.find()
     }

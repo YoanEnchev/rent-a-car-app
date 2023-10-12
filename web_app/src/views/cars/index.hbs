@@ -1,7 +1,7 @@
 {{#> body }}
     {{#each cars}}
         <div class="mb-5">
-            <p>Car: {{this.model.name}}</p>
+            <p>Model: {{this.model.name}} Year: {{this.year}}</p>
 
             <form method="POST" action="/book-car/{{this.id}}">
                 <button class="btn btn-primary">Book</button>

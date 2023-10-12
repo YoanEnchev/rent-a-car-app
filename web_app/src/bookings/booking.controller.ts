@@ -1,12 +1,19 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Param, Post, Redirect, Render } from '@nestjs/common';
+import { CarService } from 'src/cars/car.service';
+import { BookingService } from './booking.service';
+import * as express from 'express';
 
 @Controller()
 export class BookingController {
-  constructor() {}
+  constructor(private readonly bookingService: BookingService) {}
 
-  @Get()
-  @Render('home')
-  getHello() {
+
+  @Post('/book-car/:carID')
+  @Redirect('/')
+  async bookCar(@Param('carID') carID: number, req: express.Request) {
+
+    this.bookingService.createBooking(req)
+
     return {}
   }
 }

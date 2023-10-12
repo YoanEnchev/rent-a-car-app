@@ -19,10 +19,19 @@ export class BookingCreateRequest {
 
     @IsNotEmpty()
     @IsDateString()
-    @MinDate(new Date(Date.now() + 24 * 60 * 60 * 1000)) // Min date is tomorrow
+    @MinDate(new Date(Date.now())) // start can be today or later.
     startDate: Date;
 
     @IsNotEmpty()
     @IsDateString()
+    @MinDate(new Date(Date.now() + 24 * 60 * 60 * 1000)) // end date can be tommorow or later.
+    @Validate((object: BookingCreateRequest, value: any) => {
+        if (value <= object.startDate) {
+            return false;
+        }
+        return true;
+    }, {
+        message: 'Start date must be before end date.',
+    })
     endDate: Date;
 }

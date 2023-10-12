@@ -13,6 +13,7 @@ import { AdminModule } from './admin/admin.module';
 import { isAdminMiddleware } from './middleware/is-admin.middleware';
 import { CarModule } from './cars/car.module';
 import { BookingModule } from './bookings/booking.module';
+import { isAuthenticatedMiddleware } from './middleware/is-authenticated.middleware';
 
 @Module({
   imports: [
@@ -33,5 +34,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(HandlebarsMiddleware).forRoutes('*');
     consumer.apply(isAdminMiddleware).forRoutes('/admin/*');
+    consumer.apply(isAuthenticatedMiddleware).forRoutes('/book-car/*');
   }
 }

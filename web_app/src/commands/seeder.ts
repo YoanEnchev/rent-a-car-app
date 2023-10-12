@@ -121,31 +121,32 @@ export class RecordsSeed {
             })
         })
 
-
+console.log('bookings here 1')
         // Bookings
-        Promise.allSettled(carsPromises).then((results) => {
-            const cars = results
-            .filter((result) => result.status === 'fulfilled')
+
+        const result = await Promise.allSettled(carsPromises)
+
+        const cars = result.filter((result) => result.status === 'fulfilled')
             .map((result) => (result as PromiseFulfilledResult<Car>).value)
 
-            let bookingCreateRequest = Object.assign(new BookingCreateRequest(), {
-                carID: cars[0].id,
-                userID: ordinaryClient1.id,
-                startDate: (new Date()).setDate((new Date()).getDate() + 2),
-                endDate: (new Date()).setDate((new Date()).getDate() + 5)
-            })
+        let bookingCreateRequest = Object.assign(new BookingCreateRequest(), {
+            carID: cars[0].id,
+            userID: ordinaryClient1.id,
+            startDate: (new Date()).setDate((new Date()).getDate() + 2),
+            endDate: (new Date()).setDate((new Date()).getDate() + 5)
+        })
+        console.log('bookings here 2')
+        this.bookingService.createBooking(bookingCreateRequest)
 
-            this.bookingService.createBooking(bookingCreateRequest)
-
-            
-            bookingCreateRequest = Object.assign(new BookingCreateRequest(), {
-                carID: cars[1].id,
-                userID: ordinaryClient2.id,
-                startDate: (new Date()).setDate((new Date()).getDate() + 4),
-                endDate: (new Date()).setDate((new Date()).getDate() + 7)
-            })
-
-            this.bookingService.createBooking(bookingCreateRequest)
-        });
+        
+        bookingCreateRequest = Object.assign(new BookingCreateRequest(), {
+            carID: cars[1].id,
+            userID: ordinaryClient2.id,
+            startDate: (new Date()).setDate((new Date()).getDate() + 4),
+            endDate: (new Date()).setDate((new Date()).getDate() + 7)
+        })
+        console.log('bookings here 3')
+        this.bookingService.createBooking(bookingCreateRequest)
+       
     }
 }

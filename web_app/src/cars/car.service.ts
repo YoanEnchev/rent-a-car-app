@@ -23,21 +23,30 @@ export class CarService {
     private carRepository: Repository<Car>,
   ) {}
 
-  async createMake(make: CreateMake): Promise<Make> {
-    return this.makeRepository.create({...make, models: []})
+  async createMake(makeRequest: CreateMake): Promise<Make> {
+    
+    const newMake = new Make();
+    newMake.name = makeRequest.name;
+
+    return this.makeRepository.save( 
+        this.makeRepository.create(newMake)
+    );
   }
 
   async createModel(model: CreateModel): Promise<Model> {
-    return this.modelRepository.create(model)
+    return this.modelRepository.save( 
+      this.modelRepository.create(model)
+    )
   }
 
   async createCar(car: CarCreateRequest): Promise<Car> {
-    return this.carRepository.create({
-      model: {
-        id: car.modelID
-      },
-      year: car.year
-    })
+    return this.carRepository.save(
+      this.carRepository.create({
+        model: {
+          id: car.modelID
+        },
+        year: car.year
+    }));
   }
 
   async editCar(car: CarEditRequest): Promise<void> {

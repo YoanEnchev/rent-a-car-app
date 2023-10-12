@@ -20,4 +20,8 @@ export class Car {
   @ManyToMany(() => User, user => user.bookings)
   @JoinTable()
   bookings: Booking[];
+
+  getModelName() {
+    this.model.name;
+  }
 }
